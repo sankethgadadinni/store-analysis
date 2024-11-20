@@ -1,10 +1,10 @@
 import ast
 import json
 import os
-import requests
 import pandas as pd
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+import numpy as np
+from collections import Counter, defaultdict
+from ast import literal_eval
 
 
 
@@ -165,13 +165,7 @@ def calculate_kpis(data, start_interval, end_interval):
 
 
 
-from ast import literal_eval
-from collections import defaultdict
 
-import pandas as pd
-import numpy as np
-from collections import Counter, defaultdict
-from ast import literal_eval
 
 
 
@@ -463,35 +457,6 @@ def generate_shelf_activity_chart(score, logo_paths, title="Shelf Activity", xax
     return fig
 
 
-
-def generate_logo_paths_fuzzy(unique_skus_on_shelves, logo_base_path):
-    """
-    Generates logo paths for each shelf based on fuzzy matching of SKU names with available logo files.
-
-    Parameters:
-        unique_skus_on_shelves (dict): Dictionary with shelf IDs as keys and lists of SKU names as values.
-        logo_base_path (str): Base path where SKU images are stored.
-
-    Returns:
-        list: List of lists, where each inner list contains paths to logos for the SKUs on that shelf.
-    """
-    # List all available logo files in the base path
-    available_logos = os.listdir(logo_base_path)
-
-    # Generate logo paths based on fuzzy matching
-    logo_paths = []
-    for shelf_id, skus in unique_skus_on_shelves.items():
-        shelf_logos = []
-        for sku in skus:
-            # Find the best match for the SKU in available logos
-            best_match, match_score = process.extractOne(sku, available_logos, scorer=fuzz.token_sort_ratio)
-            
-            # Set a threshold to accept matches
-            if match_score > 70:  # Threshold can be adjusted based on accuracy needs
-                sku_image_path = os.path.join(logo_base_path, best_match)
-                shelf_logos.append(sku_image_path)
-        logo_paths.append(shelf_logos)
-    return logo_paths
 
 
 
